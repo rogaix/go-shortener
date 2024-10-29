@@ -1,0 +1,55 @@
+# URL Shortener
+
+This project is a URL shortener application with a Vue.js frontend and a backend API. It allows users to shorten long URLs and generate QR codes for easy sharing. Please note that this is a simple "test around" project, intended for learning and experimentation purposes.
+
+## Features
+
+- Shorten long URLs to create compact, shareable links
+- Generate QR codes for shortened URLs
+- Redirect users from short URLs to the original long URLs
+- Loading states and error handling for a smooth user experience
+
+## Technologies Used
+
+- Frontend:
+  - Vue.js 3
+  - Axios for HTTP requests
+- Backend:
+  - Go / Golang
+
+## Project Structure
+
+The project consists of a frontend application built with Vue.js and a backend API build with Go. The main frontend logic for URL shortening and redirection is contained in the `useUrlShortener` composable.
+
+## Usage
+
+1. To shorten a URL:
+   - Enter a long URL in the input field
+   - Click the "Shorten" button
+   - The shortened URL and QR code will be displayed
+
+2. To use a shortened URL:
+   - Navigate to the shortened URL
+   - You will be briefly shown the destination URL and QR code
+   - After a short delay, you will be redirected to the original long URL
+
+## API Endpoints
+
+- `POST /api/shorten`: Shortens a given URL
+  - Request body: `{ url: string }`
+  - Response: `{ short_url: string, qr_code: string }`
+
+- `GET /:shortId`: Retrieves the original URL for a given short ID
+  - Response: `{ long_url: string, qr_code: string }`
+
+## Contributing
+
+[Include instructions for how others can contribute to your project]
+
+## License
+
+[Specify the license under which your project is released]
+
+## Contact
+
+[Your contact information or ways for users to reach out with questions]
