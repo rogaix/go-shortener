@@ -14,29 +14,29 @@ import (
 )
 
 func main() {
+	// Load environment variables
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found")
 	}
 
+	// Initialize the database connection
 	if err := database.InitDB(); err != nil {
 		log.Fatalf("Failed to initialize database: %v", err)
 	}
 
-	err := database.DB.Set("gorm:table_options", "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci").AutoMigrate(&models.ShortenedURL{})
-	if err != nil {
-		log.Fatalf("Failed to auto migrate database: %v", err)
-	}
-
-	// Auto migrate the ShortenedURL model
-	if err := database.DB.AutoMigrate(&models.ShortenedURL{}); err != nil {
+	// Auto migrate the ShortenedURL model with specific table options
+	if err := database.DB.Set("gorm:table_options", "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci").AutoMigrate(&models.ShortenedURL{}); err != nil {
 		log.Fatalf("Failed to auto migrate ShortenedURL model: %v", err)
 	}
 
+	// Set up HTTP handlers with CORS middleware
 	http.HandleFunc("/api/shorten", corsMiddleware(url.ShortenURL))
 	http.HandleFunc("/", corsMiddleware(url.RedirectToURL))
 
+	// Find an available port and bind to it
 	port := 8080
 	var listener net.Listener
+	var err error
 	for {
 		listener, err = net.Listen("tcp", fmt.Sprintf(":%d", port))
 		if err != nil {
