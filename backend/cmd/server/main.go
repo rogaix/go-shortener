@@ -5,7 +5,6 @@ import (
 	"log"
 	"net"
 	"net/http"
-	"strings"
 	database "url-shortener/backend/internal/database"
 	"url-shortener/backend/internal/models"
 	url "url-shortener/backend/internal/url"
@@ -33,20 +32,10 @@ func main() {
 	http.HandleFunc("/api/shorten", corsMiddleware(url.ShortenURL))
 	http.HandleFunc("/", corsMiddleware(url.RedirectToURL))
 
-	// Find an available port and bind to it
 	port := 8080
-	var listener net.Listener
-	var err error
-	for {
-		listener, err = net.Listen("tcp", fmt.Sprintf(":%d", port))
-		if err != nil {
-			if strings.Contains(err.Error(), "address already in use") {
-				port++
-				continue
-			}
-			log.Fatalf("Failed to bind to port %d: %v", port, err)
-		}
-		break
+	listener, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
+	if err != nil {
+		log.Fatalf("Failed to bind to port %d: %v", port, err)
 	}
 
 	fmt.Printf("Server is running on http://localhost:%d\n", port)
